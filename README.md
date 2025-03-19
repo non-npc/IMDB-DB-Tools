@@ -1,4 +1,4 @@
-# IMDB TSV Tools
+# IMDB DB Tools
 
 This project allows you to run a copy of the IMDB.com movie and tv show database on your computer.
 It consists of two steps:
