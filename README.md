@@ -15,7 +15,7 @@ IMDB offers daily archives of their database which they provide in TSV format.
 
 *In order to use this project, you must have these TSV files in the imdb subfolder of the project OR already imported them and have the database created and filled*
 
-##Note
+## Note
 It will try to load missing movie and tv show descriptions from TMDB (https://www.themoviedb.org) using an API key (FREE).
 If you don't need this you can remove it from the code.
 
