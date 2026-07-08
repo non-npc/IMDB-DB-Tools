@@ -8,7 +8,6 @@ A desktop tool for importing IMDb's public datasets into SQLite, searching title
 - Local SQLite database browser
 - Search by title, type, genre, year, and rating
 - Personal collection with watched and owned status
-- Notes, tags, descriptions, and poster paths stored separately from the IMDb database
 - Poster downloads from IMDb using headless Chromium
 - Optional TMDB support for missing descriptions
 - Optional IMDb plot scraping when a description is missing
