@@ -90,7 +90,6 @@ Collection entries support:
 - Watched and owned checkboxes
 - Poster images
 - Saved descriptions
-- Notes and tags
 - Ratings, votes, genres, title type, and year
 
 Use **Add Selected** from the Search tab to add a title. The Collection tab updates automatically after an item is added.
