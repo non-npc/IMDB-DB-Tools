@@ -1,0 +1,6 @@
+PyQt6
+requests
+scrapy
+scrapy-playwright
+playwright
+

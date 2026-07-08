@@ -1,137 +1,118 @@
-**FULL REBUILD COMING THIS SUMMER (2026), STAY TUNED!**
+# IMDb DB Tools
 
-# IMDB DB Tools
+A desktop tool for importing IMDb's public datasets into SQLite, searching titles locally, and managing a personal movie/show collection.
 
-This project allows you to run a copy of the IMDB.com movie and tv show database on your computer.
-It consists of two steps:
-1- Downloading the data from IMDB
-2- Importing the data
-3- Running the DB browser to search
+## Features
 
-A Python-based toolkit for importing and managing IMDB TSV datasets locally. This project consists of two main components: a dataset importer and a database browser.
-
-To use this project you will need to already have or download the IMDB TSV files.
-
-IMDB offers daily archives of their database which they provide in TSV format.
-[IMDB TSV Archive](https://datasets.imdbws.com/)
-
-*In order to use this project, you must have these TSV files in the imdb subfolder of the project OR already imported them and have the database created and filled*
-
-## Note
-It will try to load missing movie and tv show descriptions from TMDB (https://www.themoviedb.org) using an API key (FREE).
-If you don't need this you can remove it from the code.
-
+- Guided import wizard for IMDb TSV files
+- Local SQLite database browser
+- Search by title, type, genre, year, and rating
+- Personal collection with watched and owned status
+- Notes, tags, descriptions, and poster paths stored separately from the IMDb database
+- Poster downloads from IMDb using headless Chromium
+- Optional TMDB support for missing descriptions
+- Optional IMDb plot scraping when a description is missing
 
 ![TSV Import screenshot](screenshot_tsvimport.png)
 ![IMDB Browser screenshot](screenshot_imdbbrowser.png)
 
-## Features
-
-### IMDB Dataset Importer (`tsv_import.py`)
-- **User-friendly GUI** for importing IMDB dataset files
-- **Efficient Data Processing**:
-  - Handles large TSV files with memory-efficient batch processing
-  - Maintains extracted files for faster subsequent imports
-  - Progress tracking with detailed status updates
-- **Flexible Import Options**:
-  - Create new database or append to existing one
-  - Selective import of specific dataset files
-  - Automatic table creation with appropriate column types
-  - Optimized with indexes for better query performance
-- **Supported Datasets**:
-  - title.akas.tsv.gz (Alternative titles)
-  - title.basics.tsv.gz (Basic title information)
-  - title.crew.tsv.gz (Director and writer information)
-  - title.episode.tsv.gz (TV episode information)
-  - title.principals.tsv.gz (Principal cast/crew)
-  - title.ratings.tsv.gz (Title ratings)
-  - name.basics.tsv.gz (Name information)
-
-### IMDB Browser
-- Search and browse your local IMDB database
-- Download and manage cover images
-- View detailed information about movies and TV shows
-
 ## Requirements
 
-- 24gigabytes of space for the database minimum (currently its nearing 23gb in size so a bit of room there)
-- Cover image storage is only limited by the storage available on the system as you have manual control over downloading each image.
+- Python 3.10 or newer
+- The packages listed in `requirements.txt`
+- The IMDb dataset files from [datasets.imdbws.com](https://datasets.imdbws.com/)
+- Enough free disk space for the imported database (at least 24gb) and poster images
 
-- Python 3.x
-- PyQt6
-- SQLite3
+Install Python dependencies:
 
-## Installation
-
-1. Clone this repository:
 ```bash
-git clone [repository-url]
-cd imdb_db
+pip install -r requirements.txt
 ```
 
-2. Install required packages:
+After the requirements finish installing, install Playwright's browser dependencies:
+
 ```bash
-pip install PyQt6
+playwright install
 ```
 
-3. Download IMDB datasets from [IMDB's website](https://www.imdb.com/interfaces/) and place them in an `imdb` folder in the project directory.
+## IMDb Dataset
 
-## Usage
+Download the IMDb dataset files from:
 
-### Importing Data
+[https://datasets.imdbws.com/](https://datasets.imdbws.com/)
 
-1. Run the importer:
+The importer expects these files:
+
+- `title.basics.tsv.gz`
+- `title.akas.tsv.gz`
+- `title.crew.tsv.gz`
+- `title.episode.tsv.gz`
+- `title.principals.tsv.gz`
+- `title.ratings.tsv.gz`
+- `name.basics.tsv.gz`
+
+Keep the files compressed. The importer reads the `.tsv.gz` files directly.
+
+## Importing
+
+Start the importer:
+
 ```bash
-python tsv_import.py
+python importer.py
 ```
 
-2. Use the GUI to:
-   - Select your IMDB dataset folder
-   - Choose which datasets to import
-   - Start the import process
-   - Monitor progress and status
+The wizard will:
 
-The importer will:
-- Create or update the SQLite database (`imdb.db`)
-- Extract and process the gzipped TSV files
-- Create optimized database tables with appropriate indexes
+- Ask for the folder containing the IMDb dataset files
+- Validate that the required files are present
+- Create or replace `imdb.db`
+- Import rows in batches and commit progress throughout the import
+- Show the current file, current step, row counts, database size, and log output
+- Build indexes after the data import completes
 
-### Browsing Data
+The import can take a long time. Leave the wizard open until it finishes. When the import is complete, the app displays a completion message.
 
-Run the browser:
+## Browsing
+
+Start the browser:
+
 ```bash
-python imdb_browser.py
+python browser.py
 ```
 
-## Database Structure
+Use the Search tab to find IMDb titles. Double-click a title to open its details. Poster downloads and missing descriptions are fetched only when needed.
 
-The database follows IMDB's data structure with the following main tables:
+## Collection
 
-- **title_basics**: Core information about titles
-- **title_akas**: Alternative title names
-- **title_crew**: Directors and writers
-- **title_episode**: TV episode information
-- **title_principals**: Principal cast/crew
-- **title_ratings**: User ratings
-- **name_basics**: Information about people (actors, directors, etc.)
+The Collection tab is your personal library. It is stored in `media_collection.db`, separate from the imported IMDb data.
 
-## Performance Considerations
+Collection entries support:
 
-- The importer uses batch processing to handle large datasets efficiently
-- Extracted TSV files are preserved in a temp directory for faster subsequent imports
-- Database indexes are created after data import for optimal query performance
-- The browser may take a minute to load initially due to database size (22gigs+)
+- Watched and owned checkboxes
+- Poster images
+- Saved descriptions
+- Notes and tags
+- Ratings, votes, genres, title type, and year
 
-## Contributing
+Use **Add Selected** from the Search tab to add a title. The Collection tab updates automatically after an item is added.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Descriptions
 
-## License
+Descriptions are only fetched when a title does not already have one saved.
 
-[MIT License](LICENSE)
+TMDB can be used for missing descriptions. Create a free TMDB account and API key at:
 
-## Acknowledgments
+[https://www.themoviedb.org/](https://www.themoviedb.org/)
 
-- IMDB for providing the datasets
-- PyQt team for the GUI framework
-- All contributors to this project 
+IMDb plot scraping can also be enabled for titles where TMDB does not have a description.
+
+## Posters
+
+Poster downloads use headless Chromium to load IMDb pages, follow the poster media-viewer link, and save the poster image locally under the configured image folder.
+
+If poster downloads fail, confirm Chromium is installed:
+
+```bash
+playwright install
+```
+

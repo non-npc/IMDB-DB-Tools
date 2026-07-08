@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+
+# Local databases and generated data
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+imdb/
+temp/
+imdb_images/
+
+# IMDb extracted/import source data
+*.tsv
+*.tsv.gz
+
+# Logs and local runtime files
+*.log
+*.tmp
+
+# Tooling/editor files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Playwright/Scrapy runtime output
+.scrapy/
+playwright-report/
+test-results/
+
